@@ -13,9 +13,6 @@ import fondo2 from  '../img/foto-fondo2.jpg';
 
 function Inicio() {
 
-
-
-
  return (
    <div>
    {/* Contenido específico de la página de inicio */}

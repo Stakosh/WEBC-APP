@@ -23,3 +23,9 @@ RUN chmod +x /usr/src/chat-app/entrypoint.sh
 
 # add app
 COPY . .
+
+# Exponer el puerto en el que Flask se ejecutará
+EXPOSE 8080
+
+# Definir el comando para ejecutar la aplicación
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8080"]
