@@ -1,25 +1,26 @@
-FROM python:3.9-slim-buster
+# Use the official Python image as the base image
+FROM python:3.9-alpine
 
-# set working directory
-WORKDIR /usr/src/chat-app
+RUN apk add --no-cache gcc g++ musl-dev python3-dev
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Set the working directory in the container
+WORKDIR /app
 
-# install system dependencies
-RUN apt-get update \
-  && apt-get -y install netcat gcc postgresql \
-  && apt-get clean
+# Copy the requirements file into the container
+COPY requirements.txt .
 
-# add and install requirements
-COPY ./requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install the dependencies
 
-# add entrypoint.sh
-COPY ./entrypoint.sh /usr/src/chat-app/entrypoint.sh
-RUN chmod +x /usr/src/chat-app/entrypoint.sh
+RUN pip install --no-cache-dir -r requirements.txt
 
-# add app
+# Copy the application files into the container
 COPY . .
+
+# Set environment variables
+ENV FLASK_APP=manage.py
+
+# Expose the port the app runs on (e.g., 5000)
+EXPOSE 5000
+
+# Set the command to run the Flask application
+CMD ["flask", "run", "--host=0.0.0.0"]

@@ -33,51 +33,9 @@ const Layout = ({ children }) => {
        </Container>
      </Navbar>
 
-
-     <div style={{ width: '100%' }}>
-     {children}
-     </div>
-
-
-
-
-     <footer id="contacto" style={{ backgroundColor: '#033D87', color: 'white', padding: '20px 0' }}>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6">
-            <h4>Acerca de UAI</h4>
-            <p>
-              La Universidad Adolfo Ibáñez (UAI) es una universidad privada de
-              excelencia en Chile. Es reconocida por su calidad educativa y por su
-              contribución a la investigación y el desarrollo.
-            </p>
-          </div>
-          <div className="col-md-6">
-            <div className="row">
-              <div className="col-md-6">
-                <h4>Contacto</h4>
-                <p>Correo: info@uai.cl</p>
-                <p>Teléfono: +56 2 23313100</p>
-                <p>Dirección: Diagonal Las Torres 2640, Peñalolén, Santiago, Chile</p>
-              </div>
-              <div className="col-md-6">
-                <h4>Redes Sociales</h4>
-                <div className="social-icons">
-                  <a href="https://www.instagram.com/uai_oficial/" target="_blank" rel="noopener noreferrer"><FaInstagram style={{ color: 'white', marginRight: '10px' }} /></a>
-                  <a href="https://www.facebook.com/UAI.Oficial/" target="_blank" rel="noopener noreferrer"><FaFacebook style={{ color: 'white', marginRight: '10px' }} /></a>
-                  <a href="https://www.youtube.com/user/universidadai" target="_blank" rel="noopener noreferrer"><FaYoutube style={{ color: 'white', marginRight: '10px' }} /></a>
-                  <a href="https://www.tiktok.com/@uai" target="_blank" rel="noopener noreferrer"><FaTiktok style={{ color: 'white', marginRight: '10px' }} /></a>
-                  <a href="https://twitter.com/uai_oficial" target="_blank" rel="noopener noreferrer"><FaTwitter style={{ color: 'white' }} /></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-     </footer>
+     
    </div>
  );
 };
-
 
 export default Layout;
