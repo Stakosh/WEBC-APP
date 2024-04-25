@@ -3,8 +3,7 @@ import React from 'react';
 import logo from '../img/logo.jpg';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Image } from 'react-bootstrap';
-import Noticias from './Noticias';
-import Login from './Login';
+import '../App.css';
 
 
 const Layout = ({ children }) => {
@@ -18,15 +17,16 @@ const Layout = ({ children }) => {
          <Navbar.Toggle aria-controls="basic-navbar-nav" />
          <Navbar.Collapse id="basic-navbar-nav">
            <Nav className='ml-auto'>
-             <a href="https://www.fevochi.cl/wp-content/uploads/2023/10/Calendario-Fevochi-2023-6.pdf" target="_blank" className='nav-link'>
+             <a href="https://www.fevochi.cl/wp-content/uploads/2023/10/Calendario-Fevochi-2023-6.pdf" target="_blank" rel="noreferrer noopener" className='nav-link'>
                Justificaciones
              </a>
-             <Link to="/login" className='nav-link'>
-               LOGIN
+             <Link to="/login2" className='nav-link'>
+               LOGIN2
              </Link>
              <Link to="/noticias" className='nav-link'>
                NOTICIAS
              </Link>
+
 
 
            </Nav>

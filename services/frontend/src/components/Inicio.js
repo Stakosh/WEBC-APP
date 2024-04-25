@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {  useState } from 'react';
 import '../App.css';
-import { Image, Container, Button, Card, Row, Col, Form } from 'react-bootstrap';
+import { Container, Button,  Row, Col, Form } from 'react-bootstrap';
 import ImgFondo from '../img/fondo-1.jpg';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function Inicio() {
     // Add state to manage form inputs and form submission
@@ -50,13 +51,17 @@ function Inicio() {
                                     </Form.Group>
 
                                     {/* Submit button */}
-                                    <Button type="submit" className="w-100 btn-primary">Login</Button>
+                                    <Button type="submit"style={{ backgroundColor: '#83d134', color: 'black' }} className="w-100 btn-primary">Login</Button>
                                 </Form>
                             </div>
                         </Col>
                     </Row>
                 </Container>
             </div>
+            <div style={{ width: '100%', padding: '20px' }}>
+                
+            </div>
+
         </div>
     );
 }

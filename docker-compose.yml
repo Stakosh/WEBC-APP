@@ -5,10 +5,14 @@ services:
     build:
       context: ./services/backend
       dockerfile: Dockerfile
+    volumes:
+      - "./services/backend:/usr/src/chat-app"
     ports:
       - 5000:5000
     environment:
-      - DB_URL=postgresql://postgres:postgres@flask_db:5432/postgres
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/app_dev
+      - SECRET_KEY=secret
     depends_on:
       - db
 
@@ -33,3 +37,8 @@ services:
       - CHOKIDAR_USEPOLLING= true
       - NODE_ENV= development
       - REACT_APP_BACKEND_SERVICE_URL=http://localhost:5004
+    volumes:
+      - "./services/frontend:/usr/src/chat-app"
+      - "/usr/src/chat-app/node_modules"
+    depends_on:
+      - backend
