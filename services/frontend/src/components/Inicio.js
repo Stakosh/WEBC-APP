@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import { Image, Container, Button, Card, Row, Col, Form } from 'react-bootstrap';
 import ImgFondo from '../img/fondo-1.jpg';
-import ImgFondo2 from '../img/foto-fondo2.jpg';
 
 function Inicio() {
     // Add state to manage form inputs and form submission
