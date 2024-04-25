@@ -12,7 +12,7 @@ function NewsGrid() {
             {/* Define the first image container */}
             <div className="news-grid-item">
                 {/* Display the first image */}
-                <img src='../img/gatito.png' alt="A sunset" />
+                <img src='../img/gatito.png' alt="A GATITO" />
             </div>
         </div>
     );
