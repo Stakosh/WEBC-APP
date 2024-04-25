@@ -1,7 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './App';
+import { createRoot } from 'react-dom/client'; // Import from react-dom/client
+import App from './App'; // Import your App component
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+// Create a root element and render the App component
+const rootElement = document.getElementById('root');
+const root = createRoot(rootElement);
 root.render(<App />);
