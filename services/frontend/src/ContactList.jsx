@@ -18,7 +18,6 @@ const ContactList = ({contacts}) => {
                         <td>{contact.firstName}</td>
                         <td>{contact.lastName}</td>
                         <td>{contact.email}</td>
-                        <td>{contact.firstName}</td>
                         <td>
                             <button>Update</button>
                             <button>Delete</button>
@@ -30,3 +29,5 @@ const ContactList = ({contacts}) => {
         </table>
     </div>
 }
+
+export default ContactList;
