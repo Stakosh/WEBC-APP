@@ -29,3 +29,4 @@ const handleLogin = async (formData) => {
         // Handle request error (e.g., display an error message)
     }
 };
+export { handleLogin };

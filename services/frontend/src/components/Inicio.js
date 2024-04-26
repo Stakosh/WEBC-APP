@@ -1,9 +1,9 @@
-
 import React from 'react';
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ImgFondo from '../img/foto-fondo2.jpg';
-
+import { Button, Container, Row, Col } from 'react-bootstrap';
+import LoganLerman from '../GIFS/loganlermanteamo.gif'; 
 
 function Inicio() {
     return (
@@ -14,29 +14,63 @@ function Inicio() {
                     backgroundImage: `url(${ImgFondo})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center top',
-                    height: '50vh', /* Ajusta la altura de acuerdo a tus necesidades */
+                    height: '100vh',
                     textAlign: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}
             >
-                {/* Ajusta el estilo del texto si es necesario */}
-                <h2 style={{ color: 'white' }}>PAN CON QUESO</h2>
+                {/* Contenedor para los botones */}
+                <Container>
+                    <Row className="justify-content-center">
+                        {/* Columna para el botón "Justificaciones" */}
+                        <Row xs="auto" className="justify-content-center">
+                            <Button
+                                variant="light"
+                                className="mb-3"
+                                style={{ width: '50%', padding: '10px', color: 'black', backgroundColor: 'whitesmoke' }}
+                                onClick={() => console.log('Justificaciones')}
+                            >
+                                Justificaciones
+                            </Button>
+                        </Row>
+
+                        {/* Columna para el botón "Próximos Cursos" */}
+                        <Row xs="auto" className="justify-content-center">
+                            <Button
+                                variant="light"
+                                className="mb-3"
+                                style={{ width: '50%', padding: '10px', color: 'black', backgroundColor: 'whitesmoke' }}
+                                onClick={() => console.log('Próximos Cursos')}
+                            >
+                                Próximos Cursos
+                            </Button>
+                        </Row>
+
+                        {/* Columna para el botón "Asistencias" */}
+                        <Row xs="auto" className="justify-content-center">
+                            <Button
+                                variant="light"
+                                style={{ width: '50%', padding: '10px', color: 'black', backgroundColor: 'whitesmoke' }}
+                                onClick={() => console.log('Asistencias')}
+                            >
+                                Asistencias
+                            </Button>
+                        </Row>
+                    </Row>
+                </Container>
             </div>
-    
-            {/* Contenedor separado para el contenido */}
-            <section
-                style={{
-                    padding: '50px',
-                    textAlign: 'center',
-                    color: 'black', /* Cambia el color si es necesario */
-                }}
-            >
-                {/* Aquí puedes agregar cualquier contenido adicional que desees */}
-                <h2>PAN</h2>
-                <h2>con</h2>
-                <h2>QUESO</h2>
-            </section>
+            <Col>
+            <Container>
+            
+            <img src={LoganLerman} alt="Logan Lerman" style={{ width: '30%', height: '30%' }} />
+        
+            </Container>
+            </Col>
         </div>
     );
-    
 }
+
 export default Inicio;
+

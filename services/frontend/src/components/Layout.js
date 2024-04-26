@@ -18,13 +18,13 @@ const Layout = ({ children }) => {
          <Navbar.Collapse id="basic-navbar-nav">
            <Nav className='ml-auto'>
              <a href="https://www.fevochi.cl/wp-content/uploads/2023/10/Calendario-Fevochi-2023-6.pdf" target="_blank" rel="noreferrer noopener" className='nav-link'>
-               Justificaciones
+              Probando 1
              </a>
              <Link to="/inicio" className='nav-link'>
-               INICIO
+             Probando 2
              </Link>
              <Link to="/noticias" className='nav-link'>
-               NOTICIAS
+             Probando 3
              </Link>
 
 

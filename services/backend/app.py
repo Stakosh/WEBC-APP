@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@db:5432/app_dev'
 app.config['SECRET_KEY'] = 'secret'  #la clave esta en el docker-compose
+CORS(app)
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
