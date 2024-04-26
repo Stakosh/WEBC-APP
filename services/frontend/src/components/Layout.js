@@ -20,8 +20,8 @@ const Layout = ({ children }) => {
              <a href="https://www.fevochi.cl/wp-content/uploads/2023/10/Calendario-Fevochi-2023-6.pdf" target="_blank" rel="noreferrer noopener" className='nav-link'>
                Justificaciones
              </a>
-             <Link to="/login2" className='nav-link'>
-               LOGIN2
+             <Link to="/inicio" className='nav-link'>
+               INICIO
              </Link>
              <Link to="/noticias" className='nav-link'>
                NOTICIAS

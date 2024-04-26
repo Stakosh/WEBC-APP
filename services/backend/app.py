@@ -1,36 +1,65 @@
-import os
-from flask import Flask
-from flask_cors import CORS
+from flask import Flask, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
-# Importar el Blueprint desde api.py
-from api import api_bp
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@db:5432/app_dev'
+app.config['SECRET_KEY'] = 'secret'  #la clave esta en el docker-compose
 
-cors = CORS()
-db = SQLAlchemy()
+db = SQLAlchemy(app)
+login_manager = LoginManager(app)
 
-def create_app(script_info=None):
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
 
-    # Configura las configuraciones de la aplicación desde variables de entorno
-    app_settings = os.getenv("APP_SETTINGS")
-
-    # Instancia la aplicación Flask
-    app = Flask(__name__)
+# Define a route for user registration
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    email = data['email']
+    plain_password = data['password']
     
-    # Establece las configuraciones de la aplicación
-    app.config.from_object(app_settings)
-
-    # Inicializa la base de datos con la aplicación
-    db.init_app(app)
+    # Hash the plain-text password
+    hashed_password = generate_password_hash(plain_password)
     
-    # Habilita CORS en la aplicación
-    cors.init_app(app)
+    # Create a new user instance
+    new_user = User(email=email, password_hash=hashed_password)
+    
+    # Save the user to the database
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return jsonify({'message': 'User registered successfully'})
 
-    # Registra el Blueprint de la API
-    app.register_blueprint(api_bp)
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
-    # Define un contexto para acceder a la aplicación y la base de datos
-    def ctx():
-        return {"app": app, "db": db}
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
 
-    return app
+    user = User.query.filter_by(username=username).first()
+    if user and user.password == password:  # Use hashing in production
+        login_user(user)
+        return jsonify({'success': True, 'message': 'Logged in successfully'})
+    else:
+        return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'success': True, 'message': 'Logged out successfully'})
+
+@app.route('/protected')
+@login_required
+def protected():
+    return jsonify({'success': True, 'message': 'You are in a protected route'})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is imported
 import { Container, Button, Row, Col, Form } from 'react-bootstrap';
 import ImgFondo from '../img/fondo-1.jpg';
+import { handleLogin } from '../utils/auth';
+
 
 function Login2() {
-    // State for managing form inputs
-    const [formData, setFormData] = useState({
+       // State for managing form inputs
+       const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
 
     // Event handler for form submission
-    const handleLogin = (event) => {
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
-        // Add your login logic here (e.g., authenticate the user)
-        console.log('Login submitted with email:', formData.email, 'and password:', formData.password);
+        // Call the imported handleLogin function with formData
+        await handleLogin(formData);
     };
 
     // Event handler for input changes

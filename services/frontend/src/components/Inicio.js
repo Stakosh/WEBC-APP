@@ -1,69 +1,42 @@
-import React, {  useState } from 'react';
+
+import React from 'react';
 import '../App.css';
-import { Container, Button,  Row, Col, Form } from 'react-bootstrap';
-import ImgFondo from '../img/fondo-1.jpg';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ImgFondo from '../img/foto-fondo2.jpg';
 
 
 function Inicio() {
-    // Add state to manage form inputs and form submission
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleLogin = (event) => {
-        event.preventDefault();
-        // Add your login logic here (e.g., authenticate the user)
-        console.log('Login submitted with email:', email, 'and password:', password);
-    };
-
     return (
-        <div style={{ backgroundImage: `url(${ImgFondo})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-            <div>
-                <Container>
-                    <Row>
-                        {/* Add login form section */}
-                        <Col md={4} className="offset-md-4 mt-5">
-                            <div className="login-box bg-white p-4 rounded shadow-lg">
-                                <h2 className="text-center">Login</h2>
-                                <Form onSubmit={handleLogin}>
-                                    {/* Email input */}
-                                    <Form.Group controlId="formEmail" className="mb-3">
-                                        <Form.Label>Email:</Form.Label>
-                                        <Form.Control
-                                            type="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="Enter email"
-                                            required
-                                        />
-                                    </Form.Group>
-
-                                    {/* Password input */}
-                                    <Form.Group controlId="formPassword" className="mb-3">
-                                        <Form.Label>Password:</Form.Label>
-                                        <Form.Control
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            placeholder="Enter password"
-                                            required
-                                        />
-                                    </Form.Group>
-
-                                    {/* Submit button */}
-                                    <Button type="submit"style={{ backgroundColor: '#83d134', color: 'black' }} className="w-100 btn-primary">Login</Button>
-                                </Form>
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
+        <div>
+            {/* Contenedor para la imagen de fondo */}
+            <div
+                style={{
+                    backgroundImage: `url(${ImgFondo})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center top',
+                    height: '50vh', /* Ajusta la altura de acuerdo a tus necesidades */
+                    textAlign: 'center',
+                }}
+            >
+                {/* Ajusta el estilo del texto si es necesario */}
+                <h2 style={{ color: 'white' }}>PAN CON QUESO</h2>
             </div>
-            <div style={{ width: '100%', padding: '20px' }}>
-                
-            </div>
-
+    
+            {/* Contenedor separado para el contenido */}
+            <section
+                style={{
+                    padding: '50px',
+                    textAlign: 'center',
+                    color: 'black', /* Cambia el color si es necesario */
+                }}
+            >
+                {/* Aquí puedes agregar cualquier contenido adicional que desees */}
+                <h2>PAN</h2>
+                <h2>con</h2>
+                <h2>QUESO</h2>
+            </section>
         </div>
     );
+    
 }
-
 export default Inicio;
