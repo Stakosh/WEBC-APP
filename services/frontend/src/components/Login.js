@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import { Container, Button, Row, Col, Form } from 'react-bootstrap';
 import ImgFondo from '../img/fondo-1.jpg'; // Make sure the path is correct
 import { useAuth } from '../AuthContext'; // Import useAuth hook
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import NewRegister from './NewRegister';
+
+
 
 function Login() {
-    // State for managing form inputs
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
-
-    const { login } = useAuth(); // Get login function from context
+    const [error, setError] = useState(''); // State to handle error messages
+    const { login } = useAuth();
+    const navigate = useNavigate(); // useNavigate hook for redirection
 
     // Handle input changes
     const handleChange = (event) => {
@@ -19,23 +23,28 @@ function Login() {
             ...prevState,
             [name]: value
         }));
+        setError(''); // Reset error message on input change
     };
 
-    // Handle form submission using the context's login function
+    // Handle form submission
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        login(formData.email, formData.password); // Use the login function from context
+        try {
+            await login(formData.email, formData.password);
+            navigate('/inicio'); // Navigate to '/inicio' on successful login
+        } catch (error) {
+            setError('Invalid email or password'); // Set error message on login failure
+        }
     };
 
-    // Placeholder handlers for registration and password recovery
+    // Placeholder handlers for other functionalities
     const handleRegisterClick = () => {
         console.log('New register clicked');
-        // Implement registration logic or redirect to a registration page
+        navigate('/new');
     };
 
     const handleForgotPasswordClick = () => {
         console.log('Forgot password clicked');
-        // Implement password recovery logic or redirect to a recovery page
     };
 
     return (
