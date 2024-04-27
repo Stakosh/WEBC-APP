@@ -3,12 +3,13 @@ import bcrypt
 from config import create_app
 from flask.cli import FlaskGroup
 from models import UniversityCredential
-from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, request
+from db import db
 
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
-db = SQLAlchemy()
+db.init_app(app)
+
 
 @app.route('/new', methods=['POST'])
 def register():
@@ -52,5 +53,27 @@ def add_credential(student_id, first_name, last_name, email, password):
     db.session.commit()
     return {"status": "ok", "credential": new_credential.to_json()}
 
+
+
+def is_database_empty():
+    return UniversityCredential.query.first() is None
+
+def initialize_default_user():
+    if is_database_empty():
+        hashed_password = bcrypt.hashpw('queso'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        add_credential(
+            student_id='20723182-7',
+            first_name='Javiera',
+            last_name='Soto',
+            email='queso@queso.cl',
+            password=hashed_password
+        )
+        print("Default user created.")
+    else:
+        print("Database is not empty. No default user created.")
+
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()  # Ensure all tables are created
+        initialize_default_user()  # Check if the DB is empty and possibly add default user
     cli()
