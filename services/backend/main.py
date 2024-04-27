@@ -1,46 +1,56 @@
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
-
-# Initialize Flask app
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
-
-# SQLAlchemy configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@db:5432/app_dev'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'SECRET_KEY'  # Change this to your actual secret key
-
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
-
-# Import models here
+import os
+import bcrypt
+from config import create_app
+from flask.cli import FlaskGroup
 from models import UniversityCredential
+from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, jsonify, request
 
-# Routes
-@app.route('/new', methods=['POST', 'OPTIONS'])  # Include OPTIONS method
-def handle_new():
-    if request.method == 'OPTIONS':  # Handle OPTIONS request
-        return '', 200
+app = create_app()
+cli = FlaskGroup(create_app=create_app)
+db = SQLAlchemy()
 
-    # Handle actual POST request logic here
-    # This is where you create a new credential
+@app.route('/new', methods=['POST'])
+def register():
+    """Endpoint to register a new university credential."""
     data = request.get_json()
+    hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
+    result = add_credential(
+        student_id=data.get('student_id'),
+        first_name=data.get('first_name'),
+        last_name=data.get('last_name'),
+        email=data.get('email'),
+        password=hashed_password.decode('utf-8')  # Store the hashed password as a string
+    )
+    return jsonify(result), 201 if result['status'] == 'ok' else 400
+
+@app.route('/login', methods=['POST'])  # Changed to POST for security reasons
+def login():
+    """Endpoint to retrieve credentials by email and password."""
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+    credential = UniversityCredential.query.filter_by(email=email).first()
+    if credential and bcrypt.checkpw(password.encode('utf-8'), credential.password.encode('utf-8')):
+        return jsonify(credential.to_json())
+    else:
+        return jsonify({"error": "Invalid credentials"}), 404
+
+def add_credential(student_id, first_name, last_name, email, password):
+    """Add a new credential to the database."""
+    if UniversityCredential.query.filter_by(email=email).first():
+        return {"status": "error", "message": "Email already exists."}
+    
     new_credential = UniversityCredential(
-        student_id=data["studentID"],
-        first_name=data["firstName"],
-        last_name=data["lastName"],
-        email=data["email"],
-        faculty=data["faculty"],
-        department=data["department"],
-        year=data["year"]
+        student_id=student_id,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        password=password  # Assume password is already hashed
     )
     db.session.add(new_credential)
     db.session.commit()
-    return jsonify({"message": "Credential created successfully"}), 201
+    return {"status": "ok", "credential": new_credential.to_json()}
 
-# Run the application
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    cli()

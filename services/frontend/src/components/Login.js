@@ -1,39 +1,43 @@
 import React, { useState } from 'react';
 import { Container, Button, Row, Col, Form } from 'react-bootstrap';
 import ImgFondo from '../img/fondo-1.jpg'; // Make sure the path is correct
-import { useAuth } from '../AuthContext'; // Import useAuth hook
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import NewRegister from './NewRegister';
-
 
 
 function Login() {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    });
-    const [error, setError] = useState(''); // State to handle error messages
-    const { login } = useAuth();
-    const navigate = useNavigate(); // useNavigate hook for redirection
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({ email: '', password: '' });
 
-    // Handle input changes
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-        setError(''); // Reset error message on input change
+        setFormData(prevState => ({ ...prevState, [name]: value }));
     };
 
-    // Handle form submission
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         try {
-            await login(formData.email, formData.password);
-            navigate('/inicio'); // Navigate to '/inicio' on successful login
+            // Here we're using POST to send the login details to the backend
+            const response = await fetch('http://localhost:5000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Login successful:', data);
+                navigate('/dashboard'); // Navigate to the dashboard upon successful login
+            } else {
+                console.error('Login failed:', data.error);
+                alert(data.error || 'Invalid credentials'); // Provide feedback for failed login
+            }
         } catch (error) {
-            setError('Invalid email or password'); // Set error message on login failure
+            console.error('Error during login:', error);
+            alert('Error during login. Please try again.');
         }
     };
 

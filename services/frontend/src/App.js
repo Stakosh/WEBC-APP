@@ -1,26 +1,27 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './AuthContext'; // Import AuthProvider
 import Layout from './components/Layout.js';
 import Inicio from './components/Inicio.js';
-import Noticias from './components/Noticias';
+//import Noticias from './components/Noticias';
 import Login from './components/Login';
+import { AuthProvider } from './components/AuthContext';
 import ProximosCursos from './components/ProximosCursos';
 import Justificaciones from './components/Justificaciones';
 import Asistencias from './components/Asistencias.js';
 import NewRegister from './components/NewRegister.js';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
     return (
         <Router>
-            <AuthProvider> {/* Wrap everything within AuthProvider */}
+            <AuthProvider>
                 <div className="App">
                     <Layout>
                         <Routes>
                             <Route path="/" element={<Login />} />
-                            <Route path="/noticias" element={<Noticias />} />
-                            <Route path="/inicio" element={<Inicio />} />
+                            <Route path="/new" element={<NewRegister />} />
+                            <Route path="/inicio" element={<ProtectedRoute><Inicio /></ProtectedRoute>} />
                             <Route path="/justificaciones" element={<Justificaciones/>} />
                             <Route path="/asistencias" element={<Asistencias/>} />
                             <Route path="/cursos" element={<ProximosCursos />} />

@@ -1,5 +1,5 @@
 # models.py
-from main import db  # Import db instance from the config module
+from main import db  
 
 class UniversityCredential(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -7,9 +7,7 @@ class UniversityCredential(db.Model):
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
-    faculty = db.Column(db.String(100))
-    department = db.Column(db.String(100))
-    year = db.Column(db.Integer)
+    password = db.Column(db.String(200))
 
     def to_json(self):
         return {
@@ -18,7 +16,5 @@ class UniversityCredential(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
-            "faculty": self.faculty,
-            "department": self.department,
-            "year": self.year
+            "password": self.password,
         }
