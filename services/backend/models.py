@@ -1,5 +1,5 @@
 # models.py
-from db import db  
+from config import db  
 
 class UniversityCredential(db.Model):
     id = db.Column(db.Integer, primary_key=True)

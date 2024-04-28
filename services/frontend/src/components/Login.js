@@ -30,14 +30,14 @@ function Login() {
             const data = await response.json();
             if (response.ok) {
                 console.log('Login successful:', data);
-                navigate('/dashboard'); // Navigate to the dashboard upon successful login
+                navigate('/inicio'); // Navigate to the dashboard upon successful login
             } else {
                 console.error('Login failed:', data.error);
-                alert(data.error || 'Invalid credentials'); // Provide feedback for failed login
+                alert(data.error || 'Invalid credentials A '); // Provide feedback for failed login
             }
         } catch (error) {
             console.error('Error during login:', error);
-            alert('Error during login. Please try again.');
+            alert('Error during login. Please try again. AA');
         }
     };
 

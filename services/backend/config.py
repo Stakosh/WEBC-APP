@@ -1,51 +1,31 @@
 import os
 from flask import Flask
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api
+from flask_sqlalchemy import SQLAlchemy
 
 
-class BaseConfig:
-    DEBUG = True
-    TESTING = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
 
-class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
-    SECRET_KEY = os.environ.get("SECRET_KEY")
+app = Flask(__name__)
 
-
-    # app/__init__.py
-cors = CORS()
-db = SQLAlchemy()
+# Configure CORS with more specific options
+CORS(app, resources={r"/api/*": {
+    "origins": ["http://localhost:3000", "http://localhost:5000"],
+    "methods": ["GET", "POST", "OPTIONS"],
+    "allow_headers": ["*"],
+    "expose_headers": ["*"],
+    "supports_credentials": True,
+    "max_age": 3600
+}})
 
 
-def create_app(script_info=None):
 
-    #set flask app settings from environmental variables set in docker-compose
-    app_settings = os.getenv("APP_SETTINGS")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@db:5432/app_dev"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
 
-    #instantiate app
-    app = Flask(__name__)
-    
-    #set configs
-    app.config.from_object(app_settings)
+db = SQLAlchemy(app)
 
-    #set extensions
-    cors.init_app(
-        app,
-        resources= {r"*": {"origins": "http://localhost:3000", "allow_headers": "*", "expose_headers": "*"}},
-        supports_credentials= True
-    )
-    db.init_app(app)
 
-    #register api
-    api = Api(version="1.0",title="APIs",doc="/docs/")
-    api.init_app(app)
 
-    @app.shell_context_processor
-    def ctx():
-        return {"app":app,"db":db}
 
-    return app
+

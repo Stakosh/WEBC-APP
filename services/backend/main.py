@@ -1,79 +1,86 @@
-import os
 import bcrypt
-from config import create_app
-from flask.cli import FlaskGroup
+from flask import request, jsonify
+from config import app, db
 from models import UniversityCredential
-from flask import Flask, jsonify, request
-from db import db
-
-app = create_app()
-cli = FlaskGroup(create_app=create_app)
-db.init_app(app)
+#hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 
-@app.route('/new', methods=['POST'])
-def register():
-    """Endpoint to register a new university credential."""
-    data = request.get_json()
-    hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
-    result = add_credential(
-        student_id=data.get('student_id'),
-        first_name=data.get('first_name'),
-        last_name=data.get('last_name'),
-        email=data.get('email'),
-        password=hashed_password.decode('utf-8')  # Store the hashed password as a string
-    )
-    return jsonify(result), 201 if result['status'] == 'ok' else 400
 
-@app.route('/login', methods=['POST'])  # Changed to POST for security reasons
+
+
+@app.route("/", methods=["GET"])
 def login():
-    """Endpoint to retrieve credentials by email and password."""
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
-    credential = UniversityCredential.query.filter_by(email=email).first()
-    if credential and bcrypt.checkpw(password.encode('utf-8'), credential.password.encode('utf-8')):
-        return jsonify(credential.to_json())
-    else:
-        return jsonify({"error": "Invalid credentials"}), 404
+    alumnos = UniversityCredential.query.all()
+    json_alumnos = list(map(lambda x: x.to_json(), alumnos))
+    return jsonify({"alumnos": json_alumnos}), 200
 
-def add_credential(student_id, first_name, last_name, email, password):
-    """Add a new credential to the database."""
-    if UniversityCredential.query.filter_by(email=email).first():
-        return {"status": "error", "message": "Email already exists."}
+
+
+
+@app.route("/create_contact", methods=["POST"])
+def create_UniversityCredential():
     
-    new_credential = UniversityCredential(
-        student_id=student_id,
-        first_name=first_name,
-        last_name=last_name,
-        email=email,
-        password=password  # Assume password is already hashed
-    )
-    db.session.add(new_credential)
+    student_id = request.json.get("studenId")
+    first_name = request.json.get("firstName")
+    last_name = request.json.get("lastName")
+    email = request.json.get("email")
+    password = request.json.get("password")
+
+    if not first_name or student_id or not first_name or not last_name or not email or not password:
+        return ( jsonify({"message": "Rellenar todos los campos porfavor"}),
+                400,
+            )
+    new_alumno = UniversityCredential(student_id= student_id,first_name=first_name, last_name=last_name, email=email,password=password)
+    try:
+        db.session.add(new_alumno)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message": str(e)}), 400
+    
+    return jsonify({"message":"User Created, Celebracion!!"}), 201
+
+
+
+
+@app.route("/update_contact/int:user_id", methods=["PATCH"])
+def update_alumno(user_id):
+    alumno = UniversityCredential.query.get(user_id)
+
+    if not alumno:
+        return jsonify({"message": "User not found"}), 400
+    
+    data = request.json
+    alumno.student_id = data.get("studentId", alumno.student_id)
+    alumno.first_name = data.get("firstName",alumno.first_name)
+    alumno.last_name = data.get("lastName", alumno.last_name)
+    alumno.email = data.get("email", alumno.email)
+    alumno.password = data.get("password", alumno.password)
+
     db.session.commit()
-    return {"status": "ok", "credential": new_credential.to_json()}
+
+    return jsonify({"message": "Usuario MODIFICADO exitosamente"}), 200
 
 
-
-def is_database_empty():
-    return UniversityCredential.query.first() is None
 
 def initialize_default_user():
-    if is_database_empty():
+    if not UniversityCredential.query.first():  # Checks if any users exist
         hashed_password = bcrypt.hashpw('queso'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        add_credential(
-            student_id='20723182-7',
+        default_user = UniversityCredential(
+            student_id='20.723.182-7',
             first_name='Javiera',
             last_name='Soto',
             email='queso@queso.cl',
             password=hashed_password
         )
+        db.session.add(default_user)
+        db.session.commit()
         print("Default user created.")
-    else:
-        print("Database is not empty. No default user created.")
+
+
+
 
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()  # Ensure all tables are created
-        initialize_default_user()  # Check if the DB is empty and possibly add default user
-    cli()
+        db.create_all()
+
+    app.run(debug=True)
