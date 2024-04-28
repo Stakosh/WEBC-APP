@@ -13,6 +13,23 @@ import NewRegister from './components/NewRegister.js';
 
 
 function App() {
+    
+    fetch('http://localhost:5000/add_example', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    .then(response => response.json())
+    .then(data => {
+            console.log('Success:', data);
+            alert(data.message);  // Display a message to the user
+        })
+    .catch((error) => {
+            console.error('Error:', error);
+            alert('Failed to create example user');
+        });
+    
   
     return (
         <Router>

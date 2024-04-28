@@ -8,38 +8,54 @@ import time
 
 
 
-
-
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["POST"])
 def login():
-    alumnos = UniversityCredential.query.all()
-    json_alumnos = list(map(lambda x: x.to_json(), alumnos))
-    return jsonify({"alumnos": json_alumnos}), 200
+    # Get JSON data from the request
+    data = request.get_json()
 
+    # Check for missing email or password
+    email = data.get('email')
+    password = data.get('password')
+    if not email or not password:
+        return jsonify({"error": "Please provide both email and password"}), 400
 
+    # Query the database for the user by email
+    user = UniversityCredential.query.filter_by(email=email).first()
+
+    # Check if user exists and the password is correct
+    if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+        # Success: the password matches
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        # Failure: user not found or password does not match
+        return jsonify({"error": "Invalid email or password"}), 40
 
 
 @app.route("/create_contact", methods=["POST"])
-def create_UniversityCredential():
-    
-    student_id = request.json.get("studenId")
-    first_name = request.json.get("firstName")
-    last_name = request.json.get("lastName")
-    email = request.json.get("email")
-    password = request.json.get("password")
+def register():
+    # Extract data from the request
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
-    if not first_name or student_id or not first_name or not last_name or not email or not password:
-        return ( jsonify({"message": "Rellenar todos los campos porfavor"}),
-                400,
-            )
-    new_alumno = UniversityCredential(student_id= student_id,first_name=first_name, last_name=last_name, email=email,password=password)
-    try:
-        db.session.add(new_alumno)
-        db.session.commit()
-    except Exception as e:
-        return jsonify({"message": str(e)}), 400
-    
-    return jsonify({"message":"User Created, Celebracion!!"}), 201
+    # Check for the presence of email and password in the request
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+
+    # Check if user already exists
+    if UniversityCredential.query.filter_by(email=email).first():
+        return jsonify({"error": "User already exists"}), 409
+
+    # Hash the password
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # Create a new user instance
+    new_user = UniversityCredential(email=email, password=hashed_password.decode('utf-8'))
+    db.session.add(new_user)
+    db.session.commit()
+
+    # Return success message
+    return jsonify({"message": "User registered successfully"}), 201
 
 
 
@@ -63,10 +79,19 @@ def update_alumno(user_id):
     return jsonify({"message": "Usuario MODIFICADO exitosamente"}), 200
 
 
+from flask import jsonify
+from models import UniversityCredential
+from config import db, app
+import bcrypt
 
+@app.route("/add_example", methods=["POST"])
 def initialize_default_user():
-    if not UniversityCredential.query.first():  # Checks if any users exist
+    # Checks if any users exist
+    if not UniversityCredential.query.first():
+        # Creates a hashed password
         hashed_password = bcrypt.hashpw('queso'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        
+        # Creates a default user object
         default_user = UniversityCredential(
             student_id='20.723.182-7',
             first_name='Javiera',
@@ -74,12 +99,19 @@ def initialize_default_user():
             email='queso@queso.cl',
             password=hashed_password
         )
+        
+        # Adds the default user to the database
         db.session.add(default_user)
         db.session.commit()
-        print("Default user created.")
+        
+        # Returns a success message
+        return jsonify({"message": "Default user created successfully"}), 201
+        
+    # Returns a message if a user already exists
+    return jsonify({"message": "User already exists"}), 200
 
 
-time.sleep(30)
+time.sleep(10)
 with app.app_context():
         db.create_all()
 
