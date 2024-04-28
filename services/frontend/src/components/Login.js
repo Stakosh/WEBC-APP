@@ -17,7 +17,7 @@ function Login() {
         event.preventDefault();
         try {
             // Here we're using POST to send the login details to the backend
-            const response = await fetch('http://localhost:5000/login', {
+            const response = await fetch('http://localhost:5000/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

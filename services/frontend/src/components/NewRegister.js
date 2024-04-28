@@ -30,7 +30,7 @@ function NewRegister() {
         }
 
         try {
-            const response = await fetch('http://localhost:5000//create_contact', {
+            const response = await fetch('http://localhost:5000/create_contact', {
                 method: 'POST',
                 mode: "no-cors",
                 headers: {
