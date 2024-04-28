@@ -22,7 +22,7 @@ def login():
 @app.route("/create_contact", methods=["POST"])
 def create_UniversityCredential():
     
-    student_id = request.json.get("studenId")
+    student_id = request.json.get("studentId")
     first_name = request.json.get("firstName")
     last_name = request.json.get("lastName")
     email = request.json.get("email")
@@ -87,3 +87,4 @@ with app.app_context():
 if __name__ == "__main__":
 
     app.run(debug=True)
+    initialize_default_user()

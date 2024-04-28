@@ -32,7 +32,7 @@ function NewRegister() {
         try {
             const response = await fetch('http://localhost:5000/create_contact', {
                 method: 'POST',
-                mode: "no-cors",
+                mode: "cors",
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -52,7 +52,7 @@ function NewRegister() {
 
             console.log('Credential created:', data);
             setSuccess(true);
-            setTimeout(() => navigate('/login'), 2000); // Redirect after a short delay
+            setTimeout(() => navigate('/inicio'), 2000); // Redirect after a short delay
         } catch (error) {
             setError(error.message);
             setSuccess(false);
