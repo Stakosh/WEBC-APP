@@ -1,0 +1,14 @@
+{
+  "welcome": "Bienvenido a nuestro sitio web",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "login": "Iniciar sesión",
+  "newRegister": "Nuevo registro",
+  "forgotPassword": "Olvidé mi contraseña",
+  "layout": {
+      "link1": "Enlace 1",
+      "link2": "Enlace 2",
+      "link3": "Enlace 3",
+      "link4": "Enlace 4"
+  }
+}

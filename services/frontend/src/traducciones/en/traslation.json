@@ -1,0 +1,15 @@
+{
+  "welcome": "Welcome to Our Website",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "newRegister": "New Register",
+  "forgotPassword": "I Forgot My Password",
+  "layout": {
+      "link1": "Link 1",
+      "link2": "Link 2",
+      "link3": "Link 3",
+      "link4": "Link 4"
+  }
+}
+  
