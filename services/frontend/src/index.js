@@ -4,8 +4,8 @@ import App from './App'; // Import your App component
 import './index.css';
 import { I18nextProvider } from 'react-i18next';
 import i18next from 'i18next';
-import global_es from "./traducciones/es/traslation.json";
-import global_en from "./traducciones/en/traslation.json";
+import global_es from "./traducciones/es/translation.json";
+import global_en from "./traducciones/en/translation.json";
 
 i18next.init({
     interpolation: { escapeValue: false }, // React already does escaping

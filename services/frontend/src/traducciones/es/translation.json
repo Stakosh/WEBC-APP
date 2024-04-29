@@ -5,10 +5,9 @@
   "login": "Iniciar sesión",
   "newRegister": "Nuevo registro",
   "forgotPassword": "Olvidé mi contraseña",
-  "layout": {
-      "link1": "Enlace 1",
-      "link2": "Enlace 2",
-      "link3": "Enlace 3",
-      "link4": "Enlace 4"
-  }
+  "layout.link1": "Enlace 1",
+  "layout.link2": "Enlace 2",
+  "layout.link3": "Enlace 3",
+  "layout.link4": "Enlace 4"
 }
+  

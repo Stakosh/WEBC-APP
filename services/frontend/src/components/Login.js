@@ -86,13 +86,6 @@ function Login() {
                                 <Button variant="link" onClick={() => navigate('/forgot-password')}>{t('forgotPassword')}</Button>
                             </div>
                             <div className="text-center mt-3">
-                                <Button variant="outline-secondary" size="sm" onClick={() => handleLanguageChange('en')}>
-                                    English
-                                </Button>
-                                {' '}
-                                <Button variant="outline-secondary" size="sm" onClick={() => handleLanguageChange('es')}>
-                                    Español
-                                </Button>
                             </div>
                         </div>
                     </Col>
